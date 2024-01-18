@@ -12,7 +12,6 @@ public class Group implements Serializable {
 
 	@Id
 	@Column(name = "CODGRUPO")
-	@SequenceGenerator(name = "group_seq", sequenceName = "GROUP_SEQUENCE", allocationSize = 1, initialValue = 1)
 	private int groupCode;
 	
 	@Column(name = "DESCRIPCION")
@@ -28,13 +27,15 @@ public class Group implements Serializable {
 		
 	}
 	
-	public Group(String description, String classroom) {
+	
+	public Group(int groupCode, String description, String classroom) {
 		this.description = description;
 		this.classroom = classroom;
+		this.groupCode = groupCode;
 	}
 	
-	public Group(String description, String classroom, Set<Student> students) {
-		this(description, classroom);
+	public Group(int groupCode, String description, String classroom, Set<Student> students) {
+		this(groupCode, description, classroom);
 		this.students = students;
 	}
 	
