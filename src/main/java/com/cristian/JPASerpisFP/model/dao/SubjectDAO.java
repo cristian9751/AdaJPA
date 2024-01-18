@@ -1,5 +1,6 @@
 package com.cristian.JPASerpisFP.model.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityExistsException;
@@ -22,18 +23,11 @@ public class SubjectDAO implements Dao<Subject> {
 
 	@Override
 	public List<Subject> findAll() throws Exception {
+		List<Subject> subjects = new ArrayList<>();
 		EntityManager em = getEntityManager();
 		Query query = em.createQuery("SELECT subject FROM Subject subject");
-		return query.getResultList();
-		
-	}
-
-	@Override
-	public void update(Subject updatedSubject) throws Exception {
-		findById(updatedSubject.getSubjectCode());
-		performTransaction(entityManager -> {
-			entityManager.merge(updatedSubject);
-		});
+		subjects = query.getResultList();
+		return subjects;
 	}
 
 	@Override

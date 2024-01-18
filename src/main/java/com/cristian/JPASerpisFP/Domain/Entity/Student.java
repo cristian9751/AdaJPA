@@ -32,7 +32,6 @@ public class Student {
 			)
 	private Set<Subject> subjects = new HashSet<>();
 	
-	public Student() {} //ELIMINAR
 	
 	public Student(String name, String surname, Group group, Set<Subject> subjects) {
 		this.name = name;

@@ -1,5 +1,6 @@
 package com.cristian.JPASerpisFP.model.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityExistsException;
@@ -22,19 +23,14 @@ public class StudentDAO implements Dao<Student> {
 
 	@Override
 	public List<Student> findAll() throws Exception {
+		List<Student> students = new ArrayList<Student>();
 		EntityManager entityManager = getEntityManager();
 		Query query = entityManager.createQuery("SELECT student FROM Student student");
-		return query.getResultList();
+		students = query.getResultList();
+		return students;
 	}
 
-	@Override
-	public void update(Student updatedStudent) throws Exception {
-		findById(updatedStudent.getNIA());
-		performTransaction(entityManager -> {
-			entityManager.merge(updatedStudent);
-		});
-		
-	}
+	
 
 	@Override
 	public Student findById(Object studentId) throws Exception {
@@ -49,5 +45,17 @@ public class StudentDAO implements Dao<Student> {
 		});
 		
 	}
+	
+	 
+	public List<Student> findByName(String name) {
+		List<Student> students = new ArrayList<Student>();
+		EntityManager entityManager = getEntityManager();
+		Query query = entityManager.createQuery("SELECT s FROM Students s WHERE s.NOMBRE = :name");
+		students = query.getResultList();
+		return students;
+	}
+	
+	
+	
 
 }

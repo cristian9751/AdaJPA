@@ -3,6 +3,7 @@ package com.cristian.JPASerpisFP.model.dao;
 import com.cristian.JPASerpisFP.Domain.Entity.Group;
 import static com.cristian.JPASerpisFP.model.PersistenceManager.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -18,17 +19,12 @@ public class GroupDAO implements Dao<Group> {
 
 	@Override
 	public List<Group> findAll() throws Exception {
+		List<Group> groups = new ArrayList<Group>();
 		EntityManager em = getEntityManager();
 		Query query = em.createQuery("SELECT group FROM Group group");
-		return query.getResultList();
-	}
-
-	@Override
-	public void update(Group updatedGroup) throws Exception {
-		findById(updatedGroup.getGroupCode());
-		performTransaction(entityManager -> {
-			entityManager.merge(updatedGroup);
-		});
+		groups = query.getResultList();
+		return groups;
+		
 	}
 
 	@Override
@@ -46,6 +42,8 @@ public class GroupDAO implements Dao<Group> {
 		});
 		
 	}
+	
+
 
 	
 }

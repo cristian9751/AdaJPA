@@ -27,14 +27,6 @@ public class FinalProjectDAO implements Dao<FinalProject> {
 	}
 
 	@Override
-	public void update(FinalProject updatedProject) throws Exception {
-		findById(updatedProject.getProyectCode());
-		performTransaction(entityManager -> {
-			entityManager.merge(updatedProject);
-		});
-	}
-
-	@Override
 	public FinalProject findById(Object projectId) throws Exception {
 		EntityManager entityManager = getEntityManager();
 		return entityManager.find(FinalProject.class, (int) projectId);
