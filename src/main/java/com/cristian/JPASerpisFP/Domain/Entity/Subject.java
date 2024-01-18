@@ -11,7 +11,6 @@ public class Subject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "CODMODULO")
 	private int subjectCode;
 	
@@ -32,7 +31,8 @@ public class Subject implements Serializable {
 	
 	public Subject() {}
 	
-	public Subject(int hours, String description) {
+	public Subject(int subjectCode, int hours, String description) {
+		this.subjectCode = subjectCode;
 		this.hours = hours;
 		this.description = description;
 	}
