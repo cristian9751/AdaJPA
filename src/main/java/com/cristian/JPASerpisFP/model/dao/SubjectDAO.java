@@ -1,14 +1,11 @@
 package com.cristian.JPASerpisFP.model.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import com.cristian.JPASerpisFP.Domain.Entity.Subject;
-
 import static com.cristian.JPASerpisFP.model.PersistenceManager.*;
 
 public class SubjectDAO implements IDao<Subject> {
@@ -22,17 +19,16 @@ public class SubjectDAO implements IDao<Subject> {
 	}
 
 	@Override
-	public List<Subject> findAll() throws Exception {
-		List<Subject> subjects = new ArrayList<>();
-		EntityManager em = getEntityManager();
-		Query query = em.createQuery("SELECT subject FROM Subject subject");
+	public List<Subject> findAll() {
+		EntityManager entityManager = getEntityManager();
+		TypedQuery<Subject> query = entityManager.createQuery("SELECT subject FROM Subject subject", Subject.class);
 		return query.getResultList();
 	}
 
 	@Override
-	public Subject findById(Object subjectId) throws Exception {
+	public Subject findById(Object subjectCode) {
 		EntityManager entityManager = getEntityManager();
-		return entityManager.find(Subject.class, (int) subjectId);
+		return entityManager.find(Subject.class, (int) subjectCode);
 	}
 
 	@Override
@@ -42,4 +38,12 @@ public class SubjectDAO implements IDao<Subject> {
 		});
 		
 	}
+
+	@Override
+	public Long countRegisters() {
+		EntityManager entityManager = getEntityManager();
+		TypedQuery<Long> query = entityManager.createQuery("SELECT COUNT(subject) FROM Subject subject", Long.class);
+		return query.getSingleResult();
+	}
+
 }
