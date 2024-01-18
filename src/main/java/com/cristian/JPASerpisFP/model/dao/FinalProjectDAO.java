@@ -9,7 +9,7 @@ import javax.persistence.Query;
 import com.cristian.JPASerpisFP.Domain.Entity.FinalProject;
 import static com.cristian.JPASerpisFP.model.PersistenceManager.*;
 
-public class FinalProjectDAO implements Dao<FinalProject> {
+public class FinalProjectDAO implements IDao<FinalProject> {
 
 	@Override
 	public void save(FinalProject project) throws Exception {

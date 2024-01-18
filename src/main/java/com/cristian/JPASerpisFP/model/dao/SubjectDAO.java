@@ -11,7 +11,7 @@ import com.cristian.JPASerpisFP.Domain.Entity.Subject;
 
 import static com.cristian.JPASerpisFP.model.PersistenceManager.*;
 
-public class SubjectDAO implements Dao<Subject> {
+public class SubjectDAO implements IDao<Subject> {
 
 	@Override
 	public void save(Subject subject) throws Exception {
@@ -26,8 +26,7 @@ public class SubjectDAO implements Dao<Subject> {
 		List<Subject> subjects = new ArrayList<>();
 		EntityManager em = getEntityManager();
 		Query query = em.createQuery("SELECT subject FROM Subject subject");
-		subjects = query.getResultList();
-		return subjects;
+		return query.getResultList();
 	}
 
 	@Override
