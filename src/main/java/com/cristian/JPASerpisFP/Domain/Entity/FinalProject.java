@@ -18,7 +18,7 @@ public class FinalProject {
 	Student student;
 	
 	
-	public FinalProject() {} //ELIMINAR
+	public FinalProject() {} 
 	
 	public FinalProject(String title, Student student) {
 		this.title = title;
