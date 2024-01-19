@@ -34,7 +34,8 @@ public class SubjectDAO implements IDao<Subject> {
 	@Override
 	public void delete(Subject subject) throws Exception {
 		performTransaction(entityManager -> {
-			entityManager.remove(subject);
+			Subject managedSubject = entityManager.merge(subject);
+			entityManager.remove(managedSubject);
 		});
 		
 	}

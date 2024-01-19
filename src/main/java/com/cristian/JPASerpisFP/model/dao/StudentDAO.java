@@ -36,7 +36,8 @@ public class StudentDAO implements IDao<Student> {
 	@Override
 	public void delete(Student student) throws Exception {
 		performTransaction(entityManager -> {
-			entityManager.remove(student);
+			Student managedStudent = entityManager.merge(student);
+			entityManager.remove(managedStudent);
 		});
 		
 	}
