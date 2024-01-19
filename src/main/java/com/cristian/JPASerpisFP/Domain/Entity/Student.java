@@ -11,10 +11,10 @@ public class Student {
 	private String NIA;
 	
 	@Column(name = "NOMBRE")
-	private String name;
+	private String name = "";
 	
 	@Column(name = "APELLIDOS")
-	private String surname;
+	private String surname = "";
 	
 	@ManyToOne
 	@JoinColumn(name = "CODGRUPO")
@@ -36,21 +36,17 @@ public class Student {
 		
 	}
 	
-	public Student(String name, String surname, Group group, Set<Subject> subjects) {
+	public Student(String NIA, Group group) {
+		this.NIA = NIA;
+		this.group = group;
+	}
+	
+	
+	public Student(String NIA, String name, String surname, Group group, Set<Subject> subjects, FinalProject project ) {
+		this(NIA, group);
 		this.name = name;
 		this.surname = surname;
-		this.group = group;
 		this.subjects = subjects;
-	}
-	
-	public Student(String NIA, String name, String surname, Group group, Set<Subject> subjects) {
-		this(name, surname, group, subjects);
-		this.NIA = NIA;
-	}
-	
-	public Student(String NIA, String name, String surname, Group group, Set<Subject> subjects, FinalProject project) {
-		this(NIA,name, surname, group, subjects);
-		this.project = project;
 	}
 	
 	

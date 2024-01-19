@@ -8,36 +8,36 @@ import javax.persistence.*;
 public class FinalProject {
 	@Id
 	@Column(name = "CODPROYECTO")
-	private String proyectCode;
+	private String projectCode;
 	
 	@Column(name = "TITULO")
 	private String title;
 	
 	@OneToOne
 	@JoinColumn(name = "NIA")
-	Student student;
+	private Student student;
 	
 	
 	public FinalProject() {} 
 	
-	public FinalProject(String title, Student student) {
-		this.title = title;
+	public FinalProject(String projectCode, Student student) {
+		this.projectCode = projectCode;
 		this.student = student;
 	}
+
 	
-	
-	public FinalProject(String proyectCode, String title, Student student) {
-		this(title, student);
-		this.proyectCode = proyectCode;
+	public FinalProject(String projectCode, Student student, String title) {
+		this(projectCode, student);
+		this.title = title;
 	}
 	
 	
-	public void setProyectCode(String proyectCode) {
-		this.proyectCode = proyectCode;
+	public void setProyectCode(String projectCode) {
+		this.projectCode = projectCode;
 	}
 	
 	public String getProyectCode() {
-		return this.proyectCode;
+		return this.projectCode;
 	}
 	
 	public void setTitle(String title) {

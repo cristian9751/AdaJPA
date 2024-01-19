@@ -11,9 +11,9 @@ public class GroupView {
 	private static GroupController groupController = new GroupController();
 	
 	
-	private static int menu(Long contador) {
+	private static int menu(Long counter) {
 		System.out.println("--------------------");
-		System.out.println("Hay " + contador + " grupos");
+		System.out.println("Hay " + counter + " grupos");
 		System.out.println("1. Mostrar todos los grupos");
 		System.out.println("2. Crear un nuevo grupo");
 		System.out.println("3. Eliminar un grupo existente");

@@ -28,17 +28,15 @@ public class Group implements Serializable {
 	}
 	
 	
-	public Group(int groupCode, String description, String classroom) {
-		this.description = description;
-		this.classroom = classroom;
+	public Group(int groupCode) {
 		this.groupCode = groupCode;
 	}
 	
-	public Group(int groupCode, String description, String classroom, Set<Student> students) {
-		this(groupCode, description, classroom);
-		this.students = students;
+	public Group(int groupCode, String description, String classroom) {
+		this(groupCode);
+		this.description = description;
+		this.classroom = classroom;
 	}
-	
 	
 	public int getGroupCode() {
 		return this.groupCode;
