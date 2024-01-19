@@ -2,12 +2,9 @@ package com.cristian.JPASerpisFP.model.dao;
 
 import java.util.List;
 
+
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-
 import com.cristian.JPASerpisFP.Domain.Entity.Group;
 import static com.cristian.JPASerpisFP.model.PersistenceManager.*;
 

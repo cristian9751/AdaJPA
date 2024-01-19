@@ -1,62 +1,50 @@
-package com.cristian.JPASerpisFP.Domain.Entity;
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+package com.cristian.JPASerpisFP.model.dao;
 
-import javax.persistence.*;
+import java.util.List;
 
-@Entity
-@Table(name = "MODULO_CP19")
-public class Subject implements Serializable {
-	private static final long serialVersionUID = 1L;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 
-	@Id
-	@Column(name = "CODMODULO")
-	private int subjectCode;
-	
-	@Column(name = "DESCRIPCION")
-	private String description;
-	
-	@Column(name = "NUMHORAS")
-	private int hours;
-	
-	@ManyToMany
-	@JoinTable(
-			name = "MATRICULA_CP19",
-			joinColumns = @JoinColumn(name = "CODMODULO"),
-			inverseJoinColumns = @JoinColumn(name = "NIA")
-			)
-	private Set<Student> students = new HashSet<>();
-	
-	
-	public Subject() {}
-	
-	public Subject(int subjectCode, int hours, String description) {
-		this.subjectCode = subjectCode;
-		this.hours = hours;
-		this.description = description;
+import com.cristian.JPASerpisFP.Domain.Entity.FinalProject;
+import static com.cristian.JPASerpisFP.model.PersistenceManager.*;
+
+
+public class FinalProjectDAO implements IDao<FinalProject> {
+
+	@Override
+	public void save(FinalProject project) throws Exception {
+		performTransaction(entityManager ->{
+			entityManager.persist(project);
+		});
 	}
-	
-	
-	
-	public int getSubjectCode() {
-		return this.subjectCode;
+
+	@Override
+	public List<FinalProject> findAll() {
+		EntityManager entityManager = getEntityManager();
+		TypedQuery<FinalProject> query = entityManager.createQuery("SELECT project FROM FinalProject project", FinalProject.class);
+		return query.getResultList();
 	}
-	
-	
-	public void setDescription(String description) {
-		this.description = description;
+
+	@Override
+	public FinalProject findById(Object projectTitle) {
+		EntityManager entityManager = getEntityManager();
+		return entityManager.find(FinalProject.class, (String) projectTitle);
 	}
-	
-	public String getDescription() {
-		return this.description;
+
+	@Override
+	public void delete(FinalProject project) throws Exception {
+		performTransaction(entityManager -> {
+			FinalProject managedProject = entityManager.merge(project);
+			entityManager.remove(managedProject);
+		});
+		
 	}
-	
-	
-	public Set<Student> getStudents() {
-		return this.students;
+
+	@Override
+	public Long countRegisters() {
+		EntityManager entityManager = getEntityManager();
+		TypedQuery<Long> query = entityManager.createQuery("SELECT COUNT(project) FROM FinalProject project", Long.class);
+		return query.getSingleResult();
 	}
-	
-	
-	
+
 }
