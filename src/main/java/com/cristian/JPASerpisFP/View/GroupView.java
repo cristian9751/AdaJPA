@@ -8,14 +8,14 @@ import static com.cristian.JPASerpisFP.View.Utils.Util.*;
 
 public class GroupView {
 	
-	private static GroupController controller = new GroupController();
+	private static GroupController groupController = new GroupController();
 	
 	
-	public static int menu() {
+	private static int menu(Long contador) {
 		System.out.println("--------------------");
-		System.out.println("Contador de grupos: " + controller.getTotal());
+		System.out.println("Hay " + contador + " grupos");
 		System.out.println("1. Mostrar todos los grupos");
-		System.out.println("2. Insertar un nuevo grupo");
+		System.out.println("2. Crear un nuevo grupo");
 		System.out.println("3. Eliminar un grupo existente");
 		System.out.println("4. Volver atras");
 		System.out.println("--------------------");
@@ -26,7 +26,12 @@ public class GroupView {
 	public static void showView() {
 		int selectedOption = 0;
 		do {
-			selectedOption = GroupView.menu();
+			Long contador = groupController.getTotalCount();
+			selectedOption = GroupView.menu(contador);
+			if(contador == 0 && (selectedOption == 1 || selectedOption == 3)) {
+				System.out.println("No hay grupos");
+				continue;
+			}
 			action(selectedOption);
 		} while(selectedOption != 4);
 	}
@@ -35,19 +40,21 @@ public class GroupView {
 	public static void action(int selectedOption) {
 		switch(selectedOption) {
 			case 1: 
-				showList(controller.getAll(), "grupos");
+				showList(groupController.getAll(), "grupos");
 				break;
 			case 2:
 				Group group = new Group(getInt("Introduce la id del nuevo grupo"), 
 						getString("Escribe la descripcion del nuevo grupo"), getString("Introduce el aula del "
 								+ "nuevo grupo"));
-				manageResult(controller.save(group), "Grupo añadido correctamente");
+				manageResult(groupController.save(group), "Grupo añadido correctamente");
 				break;
 			case 3:
-				if(showList(controller.getAll(), "grupos")) {
-					int groupCode = getInt("Introduce la id del grupo que quieres eliminar");
-					manageResult(controller.delete(groupCode), "Grupo eliminado correctamente");
-				}
+				showList(groupController.getAll(), "grupos");
+				int groupCode = getInt("Introduce la id del grupo que quieres eliminar");
+				manageResult(groupController.delete(groupCode), "Grupo eliminado correctamente");
+				break;
+			case 4:
+				System.out.println("Has seleccionado la opcion para volver al menu principal");
 				break;
 			default:
 				System.out.println("Debes  seleccionar una opcion valida");
@@ -66,9 +73,9 @@ public class GroupView {
 			case NOT_EXISTS:
 				System.out.println("El grupo no existe");
 				break;
-			case COMMON_ERROR:
-				System.out.println("Ha ocurrido un error");
-				break;
+		default:
+			System.out.println("Se ha producido un error");
+			break;
 				
 		}
 	}

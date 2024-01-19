@@ -17,7 +17,7 @@ public interface IController<T> {
 	
 	public  OperationResult delete(Object object);
 	
-	public Long getTotal();
+	public Long getTotalCount();
 	
 	
 }

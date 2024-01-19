@@ -43,6 +43,7 @@ public class GroupController implements IController<Group> {
 		if(group == null) {
 			return OperationResult.NOT_EXISTS;
 		}
+
 		
 		try {
 			dao.delete(group);
@@ -55,10 +56,15 @@ public class GroupController implements IController<Group> {
 		
 	}
 	
+		
+		
 	
-	public Long getTotal() {
+	
+	public Long getTotalCount() {
 		return dao.countRegisters();
+	}
+		
+		
 	}
 	
 
-}
