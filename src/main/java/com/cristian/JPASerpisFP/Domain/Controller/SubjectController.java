@@ -56,7 +56,7 @@ public class SubjectController  {
 		}
 		
 		try {
-			dao.save(subject);
+			dao.delete(subject);
 			return OperationResult.OK;
 		} catch(Exception e) {
 			return OperationResult.COMMON_ERROR;

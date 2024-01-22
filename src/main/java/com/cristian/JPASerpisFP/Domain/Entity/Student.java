@@ -45,13 +45,13 @@ public class Student implements Serializable{
 	@OneToOne(mappedBy = "student")
 	FinalProject project;
 	
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.MERGE)
 	@JoinTable(
 			name = "MATRICULA_CP19",
 			joinColumns = @JoinColumn(name = "NIA"),
 			inverseJoinColumns = @JoinColumn(name = "CODMODULO")
 			)
-	private List<Subject> subjects = new ArrayList<>();
+	private Set<Subject> subjects = new HashSet<Subject>();
 	
 	public Student() {
 		
@@ -62,7 +62,7 @@ public class Student implements Serializable{
 		this.group = group;
 	}
 	
-	public Student(String NIA, String name, String surname, Group group, List<Subject> subjects, FinalProject project ) {
+	public Student(String NIA, String name, String surname, Group group, Set<Subject> subjects, FinalProject project ) {
 		this(NIA, group);
 		this.name = name;
 		this.surname = surname;
@@ -75,8 +75,19 @@ public class Student implements Serializable{
 		this.surname = surname == null ? "" : name;
 	}
 	
-	public List<Subject> getSubjects() {
+	
+	
+	public Set<Subject> getSubjects() {
 		return subjects;
+	}
+	
+	
+	public void setSubject(Subject subject) {
+		this.subjects.add(subject);
+	}
+	
+	public void removeSubject(Subject subject) {
+		this.subjects.remove(subject);
 	}
 
 	
@@ -124,23 +135,9 @@ public class Student implements Serializable{
 		return this.project;
 	}
 	
-	public boolean addSubject(Subject subject) {
-		if(this.subjects.contains(subject)) {
-			return false;
-		} else {
-			this.subjects.add(subject);
-			return true;
-		}
-	}
 	
-	public boolean removeSubject(Subject subject) {
-		if(this.subjects.contains(subject)) {
-			this.subjects.remove(subject);
-			return true;
-		} else {
-			return false;
-		}
-	}
+	
+
 
 	@Override
 	public String toString() {

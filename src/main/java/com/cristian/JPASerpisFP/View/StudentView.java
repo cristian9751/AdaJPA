@@ -128,6 +128,10 @@ public class StudentView {
 					System.out.println("Se han eliminado " + groupController.deleteAll() + " alumnos ");
 					break;
 				case 5:
+					if(subjectController.getTotalCount() <= 0) {
+						System.out.println("No se puden matricular alumnos porque no hay modulos donde matricularlos");
+						break;
+					}
 					showList(studentController.getAll(), "alumnos");
 					
 					Subject subject = selectSubject();

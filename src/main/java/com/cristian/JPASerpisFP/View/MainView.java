@@ -2,14 +2,18 @@ package com.cristian.JPASerpisFP.View;
 
 import static com.cristian.JPASerpisFP.View.Utils.Input.getInt;
 
+import com.cristian.JPASerpisFP.Domain.Controller.FinalProjectController;
 import com.cristian.JPASerpisFP.Domain.Controller.GroupController;
 import com.cristian.JPASerpisFP.Domain.Controller.StudentController;
+import com.cristian.JPASerpisFP.Domain.Controller.SubjectController;
 
 
 
 public class MainView {
 	private static GroupController groupController = new GroupController();
 	private static StudentController studentController = new StudentController();
+	private static FinalProjectController finalProjectController = new FinalProjectController();
+	private static SubjectController subjectController = new SubjectController();
 	public static int menu() {
 		System.out.println("--------------------");
 		System.out.println("SELECCIONA QUIE QUIERES CONSULTAR");
@@ -47,6 +51,8 @@ public class MainView {
 				System.out.println("Eliminando todos los datos que hay en la base de datos");
 				studentController.deleteAll();
 				groupController.deleteAll();
+				finalProjectController.deleteAll();
+				subjectController.deleteAll();
 				break;
 			case 5:
 				System.out.println("Has seleccionado salir de la aplicacion");

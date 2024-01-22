@@ -55,4 +55,14 @@ public class FinalProjectController  {
 		return dao.countRegisters();
 	}
 
+	
+	public int deleteAll() {
+		try {
+			return dao.deleteAll();
+		} catch(Exception e) {
+			System.out.println("Se ha producido un error");
+		}
+		
+		return 0;
+	}
 }

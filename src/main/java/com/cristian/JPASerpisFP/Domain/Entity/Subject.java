@@ -9,7 +9,8 @@ import javax.persistence.*;
 @NamedQueries({
 	@NamedQuery(name = "Subject.selectByHours", query = "SELECT subject FROM Subject subject WHERE subject.hours = :hours"),
 	@NamedQuery(name = "Subject.selectAll", query = "SELECT subject FROM Subject subject"),
-	@NamedQuery(name = "Subject.countAll", query = "SELECT COUNT (subject) FROM Subject subject")
+	@NamedQuery(name = "Subject.countAll", query = "SELECT COUNT (subject) FROM Subject subject"),
+	@NamedQuery(name = "Subject.deleteAll", query = "DELETE FROM Subject subject")
 })
 
 
@@ -34,7 +35,7 @@ public class Subject implements Serializable {
 	@Column(name = "NUMHORAS")
 	private int hours;
 	
-	@ManyToMany
+	@ManyToMany()
 	@JoinTable(
 			name = "MATRICULA_CP19",
 			joinColumns = @JoinColumn(name = "CODMODULO"),

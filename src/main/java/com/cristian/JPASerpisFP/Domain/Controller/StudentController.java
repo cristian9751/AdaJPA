@@ -102,17 +102,24 @@ public class StudentController  {
 			return OperationResult.NOT_EXISTS;
 		} 
 		
-		if(student.addSubject(subject)) {
-			try {
-				dao.update(student);
-				return OperationResult.OK;
-			} catch(Exception e) {
-				System.out.println("Se ha producido un error " + e.getMessage());
-				return OperationResult.COMMON_ERROR;
+		for(Subject s : student.getSubjects()) {
+			if(s.getSubjectCode() == subject.getSubjectCode()) {
+				return OperationResult.ALREADY_EXISTS;
+				
 			}
-		} else {
-			return OperationResult.ALREADY_EXISTS;
+			
 		}
+		
+		try  {
+			student.setSubject(subject);
+			dao.update(student);
+			return OperationResult.OK;
+		} catch(Exception e) {
+			System.out.println(e.getMessage());
+			return OperationResult.COMMON_ERROR;
+		}
+		
+		
 	}
 	
 	public OperationResult unEnrollStudent(String NIA, Subject subject) {
@@ -120,17 +127,22 @@ public class StudentController  {
 		if(student == null) {
 			return OperationResult.NOT_EXISTS;
 		} 
-		if(student.removeSubject(subject)) {
-			try {
-				dao.update(student);
-				return OperationResult.OK;
-			} catch(Exception e) {
-				System.out.println("Se ha producido un error " + e.getMessage());
-				return OperationResult.COMMON_ERROR;
+		
+		for(Subject s : student.getSubjects()) {
+			if(s.getSubjectCode() == subject.getSubjectCode()) {
+				student.removeSubject(subject);
+				try {
+					dao.update(student);
+					return OperationResult.OK;
+				} catch(Exception e) {
+					System.out.println("Ha  ocurrido un error");
+					return OperationResult.COMMON_ERROR;
+				}
 			}
-		} else {
-			return OperationResult.ALREADY_EXISTS;
+			
 		}
+		
+		return OperationResult.ALREADY_EXISTS;
 	}
 	
 	public int deleteAll() {
@@ -143,7 +155,7 @@ public class StudentController  {
 		return result;
 	}
 	
-	private static boolean checkFCT(List<Subject> subjects) {
+	private static boolean checkFCT(Set<Subject> subjects) {
 		for(Subject subject : subjects) {
 			if(subject.getDescription().contains("FCT")) {
 				return true;

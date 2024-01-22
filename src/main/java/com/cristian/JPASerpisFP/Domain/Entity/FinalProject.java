@@ -6,12 +6,16 @@ import javax.persistence.*;
 @Entity
 @Table(name = "PROYECTO_CONVOCATORIA_CP19")
 @NamedQueries({
-	@NamedQuery(name = "FinalProject.selectByTitle", query = "SELECT project FROM FinalProject project WHERE project.title = :title"),
+	@NamedQuery(name = "Project.selectByTitle", query = "SELECT project FROM FinalProject project WHERE project.title = :title"),
 	@NamedQuery(name = "Project.selectAll", query = "SELECT project FROM FinalProject project"),
 	@NamedQuery(name = "Project.deleteAll", query = "DELETE FROM FinalProject project"),
 	@NamedQuery(name = "Project.countAll", query = "SELECT COUNT (project) FROM FinalProject project")
 })
 public class FinalProject {
+	
+	public static String DELETE_ALL = "Project.deleteAll";
+	public  static String SEARCH_ALL = "Project.selectAll";
+	public static String COUNT_ALL = "Project.countAll";
 	
 	@Id
 	@Column(name = "CODPROYECTO")

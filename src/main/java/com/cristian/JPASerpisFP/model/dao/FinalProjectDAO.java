@@ -7,6 +7,8 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import com.cristian.JPASerpisFP.Domain.Entity.FinalProject;
+import com.cristian.JPASerpisFP.Domain.Entity.Subject;
+
 import static com.cristian.JPASerpisFP.model.PersistenceManager.*;
 
 
@@ -48,15 +50,6 @@ public class FinalProjectDAO implements IDao<FinalProject> {
 		return query.getSingleResult();
 	}
 
-	@Override
-	public int deleteAll() throws Exception {
-		int[] result = new int[1];
-		performTransaction(entityManager -> {
-			Query query = entityManager.createQuery("DELETE FROM FinalProject f");
-			result[0] = query.executeUpdate();
-		});
-		return result[0];
-	}
 
 	@Override
 	public void update(FinalProject project) throws Exception {
@@ -65,6 +58,15 @@ public class FinalProjectDAO implements IDao<FinalProject> {
 		});
 	}
 
-	
+	@Override
+	public int deleteAll() throws Exception {
+		int[] result = new int[1];
+		performTransaction(entityManager -> {
+			Query query = entityManager.createNamedQuery(FinalProject.DELETE_ALL);
+			result[0] = query.executeUpdate();
+		});
+		
+		return result[0];
+	}
 
 }
