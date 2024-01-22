@@ -117,7 +117,9 @@ public class StudentController  {
 	
 	public OperationResult unEnrollStudent(String NIA, Subject subject) {
 		Student student = getById(NIA);
-		
+		if(student == null) {
+			return OperationResult.NOT_EXISTS;
+		} 
 		if(student.removeSubject(subject)) {
 			try {
 				dao.update(student);
@@ -149,6 +151,8 @@ public class StudentController  {
 		}
 		return false;
 	}
+	
+	
 	
 	
 	

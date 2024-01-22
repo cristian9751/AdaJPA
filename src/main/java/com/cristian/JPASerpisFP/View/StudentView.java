@@ -28,9 +28,10 @@ public class StudentView {
 		System.out.println("3. Eliminar un alumno existente");
 		System.out.println("4. Eliminar todos los alumnos");
 		System.out.println("5. Matricular alumno");
-		System.out.println("6. Volver atras");
+		System.out.println("6. Desmatricular alumno");
+		System.out.println("7. Volver atras");
 		System.out.println("--------------------");
-		return getInt("Selecciona una opcion del 1 al 5: ", false);
+		return getInt("Selecciona una opcion del 1 al 7: ", false);
 		
 	}
 	
@@ -56,7 +57,7 @@ public class StudentView {
 				continue;
 			}
 			action(selectedOption);
-		} while(selectedOption != 6);
+		} while(selectedOption != 7);
 	}
 	
 	
@@ -88,6 +89,7 @@ public class StudentView {
 							break;
 					} 
 				}while(filterOption != 5);
+					break;
 				case 2:
 					if(groupController.getTotalCount() <= 0) {
 						System.out.println("No se puedeen crear nuevos alumnos porque no hay grupos creados");
@@ -128,24 +130,29 @@ public class StudentView {
 				case 5:
 					showList(studentController.getAll(), "alumnos");
 					
-					Subject subject = null;
-					while(subject == null) {
-						showList(subjectController.getAll(), " modulos existentes");
-						subject = subjectController.getById(getInt("Selecciona la id  a la cual quiers matricular el alumno", false));
-						if(subject == null)
-							System.out.println("El modulo seleccionado no es valido. Intentalo de nuevo");
-						
-					}
+					Subject subject = selectSubject();
 					
-					OperationResult enrollment = studentController.enrollStudent(getStringDatabase("Indica el nia del alumno que quires matricular", false), subject);
+					OperationResult enrollment = studentController.enrollStudent(getStringDatabase("Indica el nia del alumno que quires matricular", false), 
+							subject);
 					if(enrollment == OperationResult.ALREADY_EXISTS) {
 						System.out.println("El alumno ya esta matriculado en la asignatura indicada");
 					} else {
 						manageResult(enrollment , "Se ha matriculado al alumno correctamente", "Matriculando al alumno....");
 					}
 					
+					
 					break;
 				case 6:
+					showList(studentController.getAll(), " alumnos");
+					OperationResult unEnrollment = studentController.unEnrollStudent(getStringDatabase("Indica el NIA del alumno al que quieres desmatricular", false), selectSubject());
+					if(unEnrollment == OperationResult.ALREADY_EXISTS) {
+						System.out.println("Este alumno ya esta matriculado en el modulo indicado");
+					} else {
+						manageResult(unEnrollment, "Se ha matriculado al alumno correctamente" , "Matriculando al alumno..." );
+					}
+					break;
+					
+				case 7:
 					System.out.println("Has seleccionado la opcion de volver al menu principal");
 					break;
 				default:
@@ -165,6 +172,20 @@ public class StudentView {
 		}
 		return group;
 	}
+	
+	private static Subject selectSubject() {
+		Subject subject = null;
+		while(subject == null) {
+			showList(subjectController.getAll(), " modulos existentes");
+			subject = subjectController.getById(getInt("Selecciona la id  del modulo", false));
+			if(subject == null)
+				System.out.println("El modulo seleccionado no es valido. Intentalo de nuevo");
+			
+		}
+		
+		return subject;
+	}
+	
 	
 	/**
 	 * Maneja las respuestas que se devuelven al trabajar con la entidad Student de la base de datos
@@ -189,6 +210,10 @@ public class StudentView {
 			break;
 				
 		}
+	}
+	
+	private static void manageResult(OperationResult result) {
+		
 	}
 
 }
