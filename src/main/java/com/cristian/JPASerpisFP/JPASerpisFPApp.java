@@ -4,12 +4,14 @@ import com.cristian.JPASerpisFP.View.MainView;
 import com.cristian.JPASerpisFP.model.PersistenceManager;
 
 public class JPASerpisFPApp {
-	public static void runApp() {
-		try {
-			PersistenceManager.setFactory();
+	public static void runApp(boolean defaultData) {
+		System.out.println("Iniciando...");
+		boolean  databaseConnected = PersistenceManager.setFactory();
+		if(databaseConnected) {
+			System.out.println("Bienvenido");
 			MainView.showView();
-		} catch(Exception e) {
-			System.out.println("Se ha producido un error: No se ha podido conectar a la base de datos");
+		} else {
+			System.out.println("No se ha podido conectar con la base de datos. Saliendo..");
 		}
 	}
 }

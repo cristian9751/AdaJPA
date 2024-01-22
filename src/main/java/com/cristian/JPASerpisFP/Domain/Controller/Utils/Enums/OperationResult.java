@@ -4,6 +4,7 @@ public enum OperationResult {
 	OK,
 	NOT_EXISTS,
 	ALREADY_EXISTS,
-	COMMON_ERROR
+	COMMON_ERROR,
+	NOT_DELETE,
 	
 }

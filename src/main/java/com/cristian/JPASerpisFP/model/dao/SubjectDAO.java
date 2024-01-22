@@ -3,6 +3,7 @@ package com.cristian.JPASerpisFP.model.dao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import com.cristian.JPASerpisFP.Domain.Entity.Subject;
@@ -21,7 +22,7 @@ public class SubjectDAO implements IDao<Subject> {
 	@Override
 	public List<Subject> findAll() {
 		EntityManager entityManager = getEntityManager();
-		TypedQuery<Subject> query = entityManager.createQuery("SELECT subject FROM Subject subject", Subject.class);
+		TypedQuery<Subject> query = entityManager.createNamedQuery(Subject.SEARCH_ALL, null);
 		return query.getResultList();
 	}
 
@@ -43,8 +44,35 @@ public class SubjectDAO implements IDao<Subject> {
 	@Override
 	public Long countRegisters() {
 		EntityManager entityManager = getEntityManager();
-		TypedQuery<Long> query = entityManager.createQuery("SELECT COUNT(subject) FROM Subject subject", Long.class);
+		TypedQuery<Long> query = entityManager.createNamedQuery(Subject.COUNT_ALL, Long.class);
 		return query.getSingleResult();
+	}
+
+	@Override
+	public int deleteAll() throws Exception {
+		int[] result = new int[1];
+		performTransaction(entityManager -> {
+			Query query = entityManager.createNamedQuery(Subject.DELETE_ALL);
+			result[0] = query.executeUpdate();
+		});
+		
+		return result[0];
+	}
+	
+	@Override
+	public void update(Subject subject) throws Exception {
+		performTransaction(entityManager -> {
+			entityManager.merge(subject);
+		});
+	}
+	
+	
+	public List<Subject> findByHours(int hours) {
+		EntityManager entityManager = getEntityManager();
+		TypedQuery<Subject> query = entityManager.createNamedQuery(Subject.SEARCH_HOURS, Subject.class);
+		query.setParameter("hours", hours);
+		return query.getResultList();
+		
 	}
 
 }

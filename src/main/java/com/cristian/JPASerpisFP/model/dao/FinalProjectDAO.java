@@ -3,6 +3,7 @@ package com.cristian.JPASerpisFP.model.dao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import com.cristian.JPASerpisFP.Domain.Entity.FinalProject;
@@ -46,5 +47,24 @@ public class FinalProjectDAO implements IDao<FinalProject> {
 		TypedQuery<Long> query = entityManager.createQuery("SELECT COUNT(project) FROM FinalProject project", Long.class);
 		return query.getSingleResult();
 	}
+
+	@Override
+	public int deleteAll() throws Exception {
+		int[] result = new int[1];
+		performTransaction(entityManager -> {
+			Query query = entityManager.createQuery("DELETE FROM FinalProject f");
+			result[0] = query.executeUpdate();
+		});
+		return result[0];
+	}
+
+	@Override
+	public void update(FinalProject project) throws Exception {
+		performTransaction(entityManager -> {
+			entityManager.merge(project);
+		});
+	}
+
+	
 
 }

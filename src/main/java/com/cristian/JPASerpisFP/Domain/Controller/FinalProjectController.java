@@ -8,21 +8,19 @@ import com.cristian.JPASerpisFP.Domain.Entity.FinalProject;
 import com.cristian.JPASerpisFP.model.dao.FinalProjectDAO;
 import com.cristian.JPASerpisFP.model.dao.IDao;  
 
-public class FinalProjectController implements IController<FinalProject> {
+public class FinalProjectController  {
 
 	private IDao<FinalProject> dao;
 	
 	public FinalProjectController() {
 		dao = new FinalProjectDAO();
 	}
-	@Override
 	public List<FinalProject> getAll() {
 		List<FinalProject> projects = new ArrayList<FinalProject>();
 		projects = dao.findAll();
 		return projects;
 	}
 
-	@Override
 	public OperationResult save(FinalProject project) {
 		try {
 			dao.save(project);
@@ -32,13 +30,12 @@ public class FinalProjectController implements IController<FinalProject> {
 		}
 	}
 
-	@Override
 	public FinalProject getById(Object projectTitle) {
 		FinalProject project = dao.findById(projectTitle);
 		return project;
 	}
 
-	@Override
+
 	public OperationResult delete(Object projectTitle) {
 		FinalProject project = getById(projectTitle);
 		if(project == null) {
@@ -53,8 +50,7 @@ public class FinalProjectController implements IController<FinalProject> {
 			return OperationResult.COMMON_ERROR;
 		}
 	}
-
-	@Override
+	
 	public Long getTotalCount() {
 		return dao.countRegisters();
 	}

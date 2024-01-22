@@ -1,6 +1,6 @@
 package com.cristian.JPASerpisFP.View;
 import com.cristian.JPASerpisFP.Domain.Controller.GroupController;
-
+import com.cristian.JPASerpisFP.Domain.Controller.SubjectController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,29 +8,30 @@ import java.util.function.Function;
 
 import com.cristian.JPASerpisFP.Domain.Controller.Utils.Enums.OperationResult;
 import com.cristian.JPASerpisFP.Domain.Entity.Group;
+import com.cristian.JPASerpisFP.Domain.Entity.Subject;
 import com.cristian.JPASerpisFP.View.Utils.Input;
 import com.cristian.JPASerpisFP.View.Utils.Util;
 
 import static com.cristian.JPASerpisFP.View.Utils.Input.*;
 import static com.cristian.JPASerpisFP.View.Utils.Util.*;
 
-public class GroupView {
+public class SubjectView {
 	
-	private static GroupController groupController = new GroupController();
+	private static SubjectController subjectController = new SubjectController();
 	
 
-	private static Long groupCounter;
+	private static Long subjectCounter;
 	/**
 	 * Menu de principal de grupo
 	 * @return Opcion seleccionada en el menu
 	 */
 	private static int menu() {
 		System.out.println("--------------------");
-		System.out.println("Hay " + groupCounter + " grupos");
-		System.out.println("1. Mostrar grupos (todos  o filtrados)");
-		System.out.println("2. Crear un nuevo grupo");
-		System.out.println("3. Eliminar un grupo existente");
-		System.out.println("4. Eliminar todos los grupos");
+		System.out.println("Hay " + subjectCounter + " grupos");
+		System.out.println("1. Mostrar modulos (todos  o filtrados)");
+		System.out.println("2. Crear un nuevo modulo");
+		System.out.println("3. Eliminar un modulo existente");
+		System.out.println("4. Eliminar todos los modulos");
 		System.out.println("5. Volver atras");
 		System.out.println("--------------------");
 		return getInt("Selecciona una opcion del 1 al 5: ", false);
@@ -42,8 +43,8 @@ public class GroupView {
 	 */
 	private static int filterMenu() {
 		System.out.println("--------------------");
-		System.out.println("1- Mostrar todos los grupos");
-		System.out.println("2. Mostrar los grupos filtrados por clase o aula");
+		System.out.println("1- Mostrar todos los modulos");
+		System.out.println("2. Mostrar los grupos filtrados por numero de horas")	;
 		System.out.println("3. Volver atras");
 		System.out.println("--------------------");
 		return getInt("Selecciona una opcion de la 1 a la 3", false);
@@ -61,10 +62,10 @@ public class GroupView {
 	public static void showView() {
 		int selectedOption = 0;
 		do {
-			groupCounter = groupController.getTotalCount();
-			selectedOption = GroupView.menu();
-			if(groupCounter == 0 && (selectedOption == 1 || selectedOption == 3)) {
-				System.out.println("No hay grupos");
+			subjectCounter = subjectController.getTotalCount();
+			selectedOption = SubjectView.menu();
+			if(subjectCounter == 0 && (selectedOption == 1 || selectedOption == 3)) {
+				System.out.println("No hay modulos");
 				continue;
 			}
 			action(selectedOption);
@@ -84,35 +85,38 @@ public class GroupView {
 				do {
 					filterOption = filterMenu();
 					if(filterOption == 1) {
-						showAll();
+						showList(subjectController.getAll(), " modulos");
 					} else if(filterOption == 2) {
-						String classroom = getStringDatabase("Indica la clase o aula por la cual quiers filtrar", false, 10);
-						showList(groupController.getByClassroom(classroom), "grupos que tengan esa clase");
+						int hours = getInt("Indica las horas por las que quires filtrar", false);
+						showList(subjectController.getByHours(hours), " modulos con " + hours + " horas");
 					}
 				} while(filterOption != 3);
 				break;
 			case 2: 
-				createGroups();
+				createNewInstances( obtainedSubjectCode -> {
+					Subject subject = new Subject(obtainedSubjectCode, getInt("Numero de horas que tiene el modulo", true), 
+							getStringDatabase("Introduce una breve descripcion del modulo", false));
+					manageResult(subjectController.save(subject), "Modulo creado correctamente", "Creando modulo...");
+					return null; //FIN DE LA LAMBDA
+				}, "Introduce la id del nuevo modulo", "Creacion de modulos finalizada.");
 				break;
 			case 3:
-				//ELIMINAR GRUPO SELECCIONADO CON CONFIRMACION PARA ELIMINAR LOS ALUMNOS PARTICIPANTES
-				showAll();
-				int groupCode = getInt("Introduce la id del grupo que quieres eliminar", false);
-				OperationResult result = groupController.delete(groupCode, false);
+				showList(subjectController.getAll(), " modulos");
+				int subjectCode = getInt("Introduce la id del modulo que quieres eliminar", false);
+				OperationResult result = subjectController.delete(subjectCode, false);
 				if(result == OperationResult.NOT_DELETE) {
-					showList(groupController.getById(groupCode).getStudents(), " estudiantes pertenecientes al grupo ");
-					if(confirmationMessage("El grupo que intentas eliminar tiene alumnos asignados. Si continuas se eliminaran todos los alumnos.")) {
-						System.out.println("Eliminando el grupo y todos los alumnos asociados...");
-						groupController.delete(groupCode, true);
-						System.out.println("Se ha eliminado el grupo y todos sus alumnos correctamente");
+					if(confirmationMessage("El modulo que intentas eliminar tiene alumnos matriculados. Si continuas se eliminaran todas las matriculas.")) {
+						System.out.println("Eliminando el modulo y todas las matriculas asociadas...");
+						subjectController.delete(subjectCode, true);
+						System.out.println("Se ha eliminado el modulo y todas sus matriculas correctamente");
 					}
 						
 				} else {
-					manageResult(result, "Se ha eliminado el grupo correctamente", "Eliminando grupo....");
+					manageResult(result, "Se ha eliminado el modulo correctamente", "Eliminando modulo....");
 				}
 				break;
 			case 4:
-				System.out.println("Se han eliminado " + groupController.deleteAll() + " grupos");
+				System.out.println("Se han eliminado " + subjectController.deleteAll() + " grupos");
 				break;
 			case 5:
 				System.out.println("Has seleccionado la opcion para volver al menu principal");
@@ -127,29 +131,11 @@ public class GroupView {
 	
 	
 	
-	public static void showAll() {
-		showList(groupController.getAll(), "grupos");
-	}
+
 	
 	
 	
-	/**
-	 * Crear grupos hasta que el usuario introduzca la id 0
-	 * podra crear grupso basicos solo con id  o grupos completos con todos los parametros
-	 */
-	public static void createGroups() {
-		createNewInstances( obtainedId -> {
-			Group group = new Group(obtainedId, getStringDatabase("Introduce la clase a la cual quieres asignar el grupo", true, 10),
-					getStringDatabase("Introduce una breve descripcion del grupo", true, 50)
-					);
-			manageResult(groupController.save(group), "Grupo creado con exito", "Creando grupo...");
-			return null; //FIN DE LA LAMBDA
-		}, "Introduce la id del nuevo grupo", "Creacion de grupos finalizada.");
-		
-		
-		System.out.println("Se han creado " + (groupController.getTotalCount() - groupCounter) + " grupos.");
-		
-	}
+
 
 	
 	/**
@@ -165,10 +151,10 @@ public class GroupView {
 				System.out.println(ok);
 				break;
 			case ALREADY_EXISTS:
-				System.out.println("El grupo con esa id ya existe");
+				System.out.println("El modulo con esa id ya existe");
 				break;
 			case NOT_EXISTS:
-				System.out.println("El grupo no existe");
+				System.out.println("El modulo no existe");
 				break;
 			case COMMON_ERROR: default:
 			System.out.println("Se ha producido un error");
@@ -177,3 +163,4 @@ public class GroupView {
 		}
 	}
 }
+

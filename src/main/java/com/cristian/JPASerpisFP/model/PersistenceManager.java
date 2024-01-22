@@ -12,12 +12,21 @@ public class PersistenceManager {
 	private static EntityManagerFactory emf = null;
 
 	
-	public static void setFactory() throws Exception {
+	public static boolean setFactory() {
+		boolean res = true;
 		if(emf == null) {
-			emf = Persistence.createEntityManagerFactory("SerpisFPPU");
-			closeEntityManager(emf.createEntityManager());
+			try  {
+				emf = Persistence.createEntityManagerFactory("SerpisFPPU");
+				closeEntityManager(emf.createEntityManager());
+			} catch(Exception e) {
+				System.out.print(e.getMessage());
+				res = false;
+			}
+			
 			
 		}
+		
+		return res;
 	}
 	
 	

@@ -8,4 +8,6 @@ public interface IDao<T> {
 	public T findById(Object object);
 	public void delete(T object) throws Exception;
 	public Long countRegisters();
+	public int deleteAll() throws Exception;
+	public void update(T object) throws Exception;
 }

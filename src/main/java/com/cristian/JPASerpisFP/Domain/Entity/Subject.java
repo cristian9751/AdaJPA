@@ -6,10 +6,24 @@ import java.util.Set;
 import javax.persistence.*;
 
 @Entity
+@NamedQueries({
+	@NamedQuery(name = "Subject.selectByHours", query = "SELECT subject FROM Subject subject WHERE subject.hours = :hours"),
+	@NamedQuery(name = "Subject.selectAll", query = "SELECT subject FROM Subject subject"),
+	@NamedQuery(name = "Subject.countAll", query = "SELECT COUNT (subject) FROM Subject subject")
+})
+
+
+	
+
+
 @Table(name = "MODULO_CP19")
 public class Subject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	public static final String SEARCH_HOURS = "Subject.selectByHours";
+	public static final String SEARCH_ALL = "Subject.selectAll";
+	public static final String DELETE_ALL = "Subject.deleteAll";
+	public static final String COUNT_ALL = "Subject.countAll";
 	@Id
 	@Column(name = "CODMODULO")
 	private int subjectCode;
@@ -38,7 +52,7 @@ public class Subject implements Serializable {
 	public Subject(int subjectCode, int hours, String description) {
 		this(subjectCode);
 		this.hours = hours;
-		this.description = description;
+		this.description = description == null ? "" : description;
 	}
 	
 	
