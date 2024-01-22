@@ -146,9 +146,9 @@ public class StudentView {
 					showList(studentController.getAll(), " alumnos");
 					OperationResult unEnrollment = studentController.unEnrollStudent(getStringDatabase("Indica el NIA del alumno al que quieres desmatricular", false), selectSubject());
 					if(unEnrollment == OperationResult.ALREADY_EXISTS) {
-						System.out.println("Este alumno ya esta matriculado en el modulo indicado");
+						System.out.println("Este alumno no esta matriculado en el modulo indicado");
 					} else {
-						manageResult(unEnrollment, "Se ha matriculado al alumno correctamente" , "Matriculando al alumno..." );
+						manageResult(unEnrollment, "Se ha desmatriculado al alumno correctamente" , "Desmatriculando al alumno..." );
 					}
 					break;
 					
