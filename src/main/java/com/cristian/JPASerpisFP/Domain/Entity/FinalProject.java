@@ -11,7 +11,7 @@ import javax.persistence.*;
 	@NamedQuery(name = "Project.deleteAll", query = "DELETE FROM FinalProject project"),
 	@NamedQuery(name = "Project.countAll", query = "SELECT COUNT (project) FROM FinalProject project")
 })
-public class FinalProject {
+public class FinalProject implements Serializable {
 	
 	public static String DELETE_ALL = "Project.deleteAll";
 	public  static String SEARCH_ALL = "Project.selectAll";
