@@ -10,7 +10,7 @@ import com.cristian.JPASerpisFP.model.dao.IDao;
 
 public class FinalProjectController  {
 
-	private IDao<FinalProject> dao;
+	private FinalProjectDAO dao =  new FinalProjectDAO();
 	
 	public FinalProjectController() {
 		dao = new FinalProjectDAO();

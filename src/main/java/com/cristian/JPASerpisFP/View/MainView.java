@@ -21,7 +21,8 @@ public class MainView {
 		System.out.println("2. Alumnos");
 		System.out.println("3. Modulos");
 		System.out.println("4. Eliminar todos los datos");
-		System.out.println("5. Salir de la aplicacion");
+		System.out.println("5. Proyectos");
+                System.out.println("6. Salir de la aplicacion");
 		System.out.println("--------------------");
 		return getInt("Selecciona una opcion del 1 al 3: ", false);
 	}
@@ -32,7 +33,7 @@ public class MainView {
 		do {
 			selectedOption = MainView.menu();
 			action(selectedOption);
-		} while(selectedOption != 5);
+		} while(selectedOption != 6);
 	}
 	
 	
@@ -55,8 +56,11 @@ public class MainView {
 				subjectController.deleteAll();
 				break;
 			case 5:
-				System.out.println("Has seleccionado salir de la aplicacion");
+				FinalProjectView.showView();
 				break;
+                                
+                        case 6:
+                            System.out.println("Has salido");
 			default:
 				System.out.println("Debes de seleccionar una opcion del 1 al 3");
 				break;

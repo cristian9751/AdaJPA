@@ -35,7 +35,7 @@ public class Subject implements Serializable {
 	@Column(name = "NUMHORAS")
 	private int hours;
 	
-	@ManyToMany()
+	@ManyToMany
 	@JoinTable(
 			name = "MATRICULA_CP19",
 			joinColumns = @JoinColumn(name = "CODMODULO"),

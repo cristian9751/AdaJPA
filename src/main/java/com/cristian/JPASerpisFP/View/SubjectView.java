@@ -131,7 +131,18 @@ public class SubjectView {
 	
 	
 	
-
+            public static Subject selectSubject() {
+		Subject subject = null;
+		while(subject == null) {
+			showList(subjectController.getAll(), " modulos existentes");
+			subject = subjectController.getById(getInt("Selecciona la id  del modulo", false));
+			if(subject == null)
+				System.out.println("El modulo seleccionado no es valido. Intentalo de nuevo");
+			
+		}
+		
+		return subject;
+	}
 	
 	
 	

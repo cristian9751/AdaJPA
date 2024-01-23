@@ -52,7 +52,7 @@ public class StudentView {
 		do {
 			studentCounter = studentController.getTotalCount();
 			selectedOption = StudentView.menu();
-			if(studentCounter == 0 && (selectedOption == 1 || selectedOption == 3 || selectedOption == 5)) {
+			if(studentCounter == 0 && (selectedOption == 1 || selectedOption == 3 || selectedOption == 5 || selectedOption == 6)) {
 				System.out.println("No hay estudiantes");
 				continue;
 			}
@@ -73,7 +73,7 @@ public class StudentView {
 							break;
 						case 2:
 							System.out.println("Selecciona la id de un grupo ");
-							showList(studentController.getByGroup(selectGroup()), " estudiantes del grupo");
+							showList(studentController.getByGroup(GroupView.selectGroup()), " estudiantes del grupo");
 							break;
 						case 3:
 							String name = getStringDatabase("Introduce el nombre de un alumno para realizar la busqueda", false, 50);
@@ -99,7 +99,7 @@ public class StudentView {
 					
 					createNewInstances( obtainedNIA -> {
 						String NIA = Integer.toString(obtainedNIA);
-						Group group = selectGroup();
+						Group group = GroupView.selectGroup();
 						Student student = new Student(NIA, getStringDatabase("Introduce el nombre del alumno", true, 50),
 								getStringDatabase("Introduce el apellido del alumno", true, 50), group);
 						manageResult(studentController.save(student), "Se ha creado el estudiante correctamente", "Creando alumno...");
@@ -134,7 +134,7 @@ public class StudentView {
 					}
 					showList(studentController.getAll(), "alumnos");
 					
-					Subject subject = selectSubject();
+					Subject subject = SubjectView.selectSubject();
 					
 					OperationResult enrollment = studentController.enrollStudent(getStringDatabase("Indica el nia del alumno que quires matricular", false), 
 							subject);
@@ -148,7 +148,7 @@ public class StudentView {
 					break;
 				case 6:
 					showList(studentController.getAll(), " alumnos");
-					OperationResult unEnrollment = studentController.unEnrollStudent(getStringDatabase("Indica el NIA del alumno al que quieres desmatricular", false), selectSubject());
+					OperationResult unEnrollment = studentController.unEnrollStudent(getStringDatabase("Indica el NIA del alumno al que quieres desmatricular", false), SubjectView.selectSubject());
 					if(unEnrollment == OperationResult.ALREADY_EXISTS) {
 						System.out.println("Este alumno no esta matriculado en el modulo indicado");
 					} else {
@@ -165,29 +165,19 @@ public class StudentView {
 		}
 	}
 	
-	private static Group selectGroup() {
-		Group group = null;
-		while(group == null) {
+	
+	
+	public static Student selectStudent() {
+		Student student = null;
+		while(student == null) {
+                        int selectedStudentNIA = getInt("Selecciona la id del alumno que quieres asignar al alumno", false);
 			showList(groupController.getAll(), " grupos existentes");
-			group = groupController.getById(getInt("Selecciona la id del grupo que quieres asignar al alumno", false));
-			if(group == null) {
-				System.out.println("El grupo seleccionado no es valido. Intentalo de nuevo");
+			student = studentController.getById(Integer.toString(selectedStudentNIA));
+			if(student == null) {
+				System.out.println("El alumno seleccionado no es valido. Intentalo de nuevo");
 			}
 		}
-		return group;
-	}
-	
-	private static Subject selectSubject() {
-		Subject subject = null;
-		while(subject == null) {
-			showList(subjectController.getAll(), " modulos existentes");
-			subject = subjectController.getById(getInt("Selecciona la id  del modulo", false));
-			if(subject == null)
-				System.out.println("El modulo seleccionado no es valido. Intentalo de nuevo");
-			
-		}
-		
-		return subject;
+		return student;
 	}
 	
 	
@@ -216,8 +206,6 @@ public class StudentView {
 		}
 	}
 	
-	private static void manageResult(OperationResult result) {
-		
-	}
+            
 
 }

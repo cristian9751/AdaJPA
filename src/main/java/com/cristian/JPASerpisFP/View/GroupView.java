@@ -125,7 +125,17 @@ public class GroupView {
 	
 	
 	
-	
+	public static Group selectGroup() {
+		Group group = null;
+		while(group == null) {
+			showList(groupController.getAll(), " grupos existentes");
+			group = groupController.getById(getInt("Selecciona la id del grupo que quieres asignar al alumno", false));
+			if(group == null) {
+				System.out.println("El grupo seleccionado no es valido. Intentalo de nuevo");
+			}
+		}
+		return group;
+	}
 	
 	public static void showAll() {
 		showList(groupController.getAll(), "grupos");

@@ -130,9 +130,9 @@ public class StudentController  {
 		
 		for(Subject s : student.getSubjects()) {
 			if(s.getSubjectCode() == subject.getSubjectCode()) {
-				student.removeSubject(subject);
 				try {
-					dao.update(student);
+                                        student.removeSubject(subject);
+                                        dao.update(student);
 					return OperationResult.OK;
 				} catch(Exception e) {
 					System.out.println("Ha  ocurrido un error");

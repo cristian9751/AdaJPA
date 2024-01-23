@@ -39,7 +39,7 @@ public class FinalProject {
 	
 	public FinalProject(String projectCode, Student student, String title) {
 		this(projectCode, student);
-		this.title = title;
+		this.title = title == null ? "" : title;
 	}
 	
 	

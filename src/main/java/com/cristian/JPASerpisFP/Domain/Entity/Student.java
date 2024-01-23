@@ -45,7 +45,7 @@ public class Student implements Serializable{
 	@OneToOne(mappedBy = "student")
 	FinalProject project;
 	
-	@ManyToMany(cascade = CascadeType.MERGE)
+	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(
 			name = "MATRICULA_CP19",
 			joinColumns = @JoinColumn(name = "NIA"),
