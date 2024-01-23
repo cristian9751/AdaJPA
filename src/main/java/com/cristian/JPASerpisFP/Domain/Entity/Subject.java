@@ -35,14 +35,9 @@ public class Subject implements Serializable {
 	@Column(name = "NUMHORAS")
 	private int hours;
 	
-	@ManyToMany
-	@JoinTable(
-			name = "MATRICULA_CP19",
-			joinColumns = @JoinColumn(name = "CODMODULO"),
-			inverseJoinColumns = @JoinColumn(name = "NIA")
-			)
-	private Set<Student> students = new HashSet<>();
 	
+	@OneToMany(mappedBy = "subject")
+	private Set<Enrollment> enrollments = new HashSet<Enrollment>(); 
 	
 	public Subject() {}
 	
@@ -70,11 +65,25 @@ public class Subject implements Serializable {
 	public String getDescription() {
 		return this.description;
 	}
-	
-	
-	public Set<Student> getStudents() {
-		return this.students;
+
+	public Set<Enrollment> getEnrollments() {
+		return enrollments;
 	}
+
+	public void setEnrollments(Set<Enrollment> enrollments) {
+		this.enrollments = enrollments;
+	}
+
+	@Override
+	public String toString() {
+	    return "Subject: [Code=" + subjectCode + "\nDescription=" + description +
+	           "\nHours=" + hours + "\nEnrollments=" + enrollments + "]";
+	}
+
+	
+	
+	
+
 	
 	
 	

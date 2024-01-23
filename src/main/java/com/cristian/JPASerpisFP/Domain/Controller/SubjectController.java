@@ -47,13 +47,13 @@ public class SubjectController  {
 		
 		StudentController studentController = new StudentController();
 		
-		if(!subject.getStudents().isEmpty() && isDeleteConfirmed) {
+		/**if(!subject.getStudents().isEmpty() && isDeleteConfirmed) {
 			for(Student student : subject.getStudents()) {
 				studentController.unEnrollStudent(student.getNIA(), subject);
 			}
 		} else if(!subject.getStudents().isEmpty() && !isDeleteConfirmed) {
 			return OperationResult.NOT_DELETE;
-		}
+		}**/
 		
 		try {
 			dao.delete(subject);

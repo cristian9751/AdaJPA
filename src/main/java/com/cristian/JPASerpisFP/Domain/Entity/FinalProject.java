@@ -1,6 +1,8 @@
 package com.cristian.JPASerpisFP.Domain.Entity;
 
 
+import java.io.Serializable;
+
 import javax.persistence.*;
 
 @Entity
@@ -62,4 +64,12 @@ public class FinalProject implements Serializable {
 	public Student getStudent() {
 		return this.student;
 	}
+
+	@Override
+	public String toString() {
+	    return "Project: [Code=" + projectCode + "\nTitle=" + title + "\nStudent=" + student + "]";
+	}
+
+	
+	
 }

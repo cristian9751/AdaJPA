@@ -1,8 +1,8 @@
 package com.cristian.JPASerpisFP.Domain.Entity;
 import java.io.Serializable;
-import java.util.ArrayList;
+
+import com.cristian.JPASerpisFP.Domain.Entity.Enrollment;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -45,13 +45,9 @@ public class Student implements Serializable{
 	@OneToOne(mappedBy = "student")
 	FinalProject project;
 	
-	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(
-			name = "MATRICULA_CP19",
-			joinColumns = @JoinColumn(name = "NIA"),
-			inverseJoinColumns = @JoinColumn(name = "CODMODULO")
-			)
-	private Set<Subject> subjects = new HashSet<Subject>();
+	@OneToMany(mappedBy = "student")
+	private Set<Enrollment> enrollment = new HashSet<Enrollment>();
+	
 	
 	public Student() {
 		
@@ -62,11 +58,10 @@ public class Student implements Serializable{
 		this.group = group;
 	}
 	
-	public Student(String NIA, String name, String surname, Group group, Set<Subject> subjects, FinalProject project ) {
+	public Student(String NIA, String name, String surname, Group group,  FinalProject project ) {
 		this(NIA, group);
 		this.name = name;
 		this.surname = surname;
-		this.subjects = subjects;
 	}
 	
 	public Student(String NIA, String name, String surname, Group group) {
@@ -74,24 +69,6 @@ public class Student implements Serializable{
 		this.name = name == null ? "" : name;
 		this.surname = surname == null ? "" : name;
 	}
-	
-	
-	
-	public Set<Subject> getSubjects() {
-		return subjects;
-	}
-	
-	
-	public void setSubject(Subject subject) {
-		this.subjects.add(subject);
-	}
-	
-	public void removeSubject(Subject subject) {
-		this.subjects.remove(subject);
-	}
-
-	
-	
 	
 	public void setNIA(String NIA) {
 		this.NIA = NIA;
@@ -139,13 +116,20 @@ public class Student implements Serializable{
 	
 
 
+	public Set<Enrollment> getEnrollment() {
+		return enrollment;
+	}
+
+	public void setEnrollment(Set<Enrollment> enrollment) {
+		this.enrollment = enrollment;
+	}
+
 	@Override
 	public String toString() {
 	    return "-----INFORMACION DEL ALUMNO-----\n" +
 	           "NIA: " + this.NIA + "\n" +
 	           "Nombre: " + this.name + "\n" +
 	           "Apellidos: " + this.surname + "\n" +
-	           "Numero de matriculas : " + this.subjects.size() + "\n" +
 	           "Grupo: " + this.group + "\n" +
 	           "--------------------------------\n";
 	}

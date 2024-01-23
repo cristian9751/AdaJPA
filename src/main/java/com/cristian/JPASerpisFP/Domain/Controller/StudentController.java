@@ -8,16 +8,20 @@ import java.util.Set;
 
 import com.cristian.JPASerpisFP.Domain.Controller.Utils.Enums.OperationResult;
 import com.cristian.JPASerpisFP.Domain.Entity.Subject;
+import com.cristian.JPASerpisFP.Domain.Entity.Enrollment;
 import com.cristian.JPASerpisFP.Domain.Entity.Group;
 import com.cristian.JPASerpisFP.Domain.Entity.Student;
+import com.cristian.JPASerpisFP.model.dao.EnrollmentDAO;
 import com.cristian.JPASerpisFP.model.dao.StudentDAO;
 
 public class StudentController  {
 
 	private static StudentDAO dao;
+	private static EnrollmentDAO daoEnrollment;
 	
 	public StudentController() {
 		dao = new StudentDAO();
+		daoEnrollment = new EnrollmentDAO();
 	}
 	
 
@@ -48,14 +52,10 @@ public class StudentController  {
 			return OperationResult.NOT_EXISTS;
 		}
 		
-		/**
-		 * Condicion que se realiza para saber cuando un estudiante puede ser eliminado
-		 * No puede ser eliminada de la base de datos la entidad de estudiante si tiene un projecto
-		 * si tiene mas de un modulo o si tiene un modulo pero no es el de FCT
-		 */
+		
 		if((student.getProject() != null 
-				|| student.getSubjects().size() > 1 
-				|| !checkFCT(student.getSubjects()))
+				|| student.getEnrollment().size() > 1 
+				|| !checkFCT(student))
 				&& !isDeleteConfirmed) {
 			return OperationResult.NOT_DELETE;
 			
@@ -102,8 +102,11 @@ public class StudentController  {
 			return OperationResult.NOT_EXISTS;
 		} 
 		
-		for(Subject s : student.getSubjects()) {
-			if(s.getSubjectCode() == subject.getSubjectCode()) {
+		System.out.println(student.getEnrollment().size());
+		
+		for(Enrollment e : student.getEnrollment()) {
+			if(e.getSubject().getSubjectCode() == subject.getSubjectCode()) {
+				System.out.println(e.getSubject().getSubjectCode() + "=>" + subject.getSubjectCode());
 				return OperationResult.ALREADY_EXISTS;
 				
 			}
@@ -111,11 +114,13 @@ public class StudentController  {
 		}
 		
 		try  {
-			student.setSubject(subject);
-			dao.update(student);
+			Enrollment enrollment = new Enrollment(student, subject);
+			daoEnrollment.save(enrollment);
+			student.getEnrollment().add(enrollment);
+			subject.getEnrollments().add(enrollment);
 			return OperationResult.OK;
 		} catch(Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 			return OperationResult.COMMON_ERROR;
 		}
 		
@@ -127,15 +132,18 @@ public class StudentController  {
 		if(student == null) {
 			return OperationResult.NOT_EXISTS;
 		} 
-		
-		for(Subject s : student.getSubjects()) {
-			if(s.getSubjectCode() == subject.getSubjectCode()) {
+		System.out.println(student.getEnrollment().size());
+		for(Enrollment e : student.getEnrollment()) {
+			if(e.getSubject().getSubjectCode() == subject.getSubjectCode()) {
+				System.out.println(e.getSubject().getSubjectCode() + " -> " + subject.getSubjectCode());
 				try {
-                                        student.removeSubject(subject);
-                                        dao.update(student);
+                                        daoEnrollment.delete(e);
+                                        student.getEnrollment().remove(e);
+                                        subject.getEnrollments().remove(e);
+
 					return OperationResult.OK;
-				} catch(Exception e) {
-					System.out.println("Ha  ocurrido un error");
+				} catch(Exception ex) {
+					System.out.println("Ha  ocurrido un error" + ex.getMessage());
 					return OperationResult.COMMON_ERROR;
 				}
 			}
@@ -155,9 +163,9 @@ public class StudentController  {
 		return result;
 	}
 	
-	private static boolean checkFCT(Set<Subject> subjects) {
-		for(Subject subject : subjects) {
-			if(subject.getDescription().contains("FCT")) {
+	private static boolean checkFCT(Student student) {
+		for(Enrollment enrollment : student.getEnrollment()) {
+			if(enrollment.getSubject().getDescription().contains("FCT")) {
 				return true;
 			}
 		}
