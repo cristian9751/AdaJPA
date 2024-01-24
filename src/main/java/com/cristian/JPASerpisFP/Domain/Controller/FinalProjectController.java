@@ -65,4 +65,11 @@ public class FinalProjectController  {
 		
 		return 0;
 	}
+	
+	
+	public List<FinalProject> getByTitle(String title) {
+		List<FinalProject> projects = new ArrayList<FinalProject>();
+		projects = dao.findByTitle(title);
+		return projects;
+	}
 }
