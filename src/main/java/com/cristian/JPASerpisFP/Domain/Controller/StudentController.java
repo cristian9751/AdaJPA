@@ -12,12 +12,14 @@ import com.cristian.JPASerpisFP.Domain.Entity.Enrollment;
 import com.cristian.JPASerpisFP.Domain.Entity.Group;
 import com.cristian.JPASerpisFP.Domain.Entity.Student;
 import com.cristian.JPASerpisFP.model.dao.EnrollmentDAO;
+import com.cristian.JPASerpisFP.model.dao.FinalProjectDAO;
 import com.cristian.JPASerpisFP.model.dao.StudentDAO;
 
 public class StudentController  {
 
 	private static StudentDAO dao;
 	private static EnrollmentDAO daoEnrollment;
+	private static FinalProjectDAO finalProjectDAO;
 	
 	public StudentController() {
 		dao = new StudentDAO();
@@ -106,7 +108,6 @@ public class StudentController  {
 		
 		for(Enrollment e : student.getEnrollment()) {
 			if(e.getSubject().getSubjectCode() == subject.getSubjectCode()) {
-				System.out.println(e.getSubject().getSubjectCode() + "=>" + subject.getSubjectCode());
 				return OperationResult.ALREADY_EXISTS;
 				
 			}
@@ -116,8 +117,6 @@ public class StudentController  {
 		try  {
 			Enrollment enrollment = new Enrollment(student, subject);
 			daoEnrollment.save(enrollment);
-			student.getEnrollment().add(enrollment);
-			subject.getEnrollments().add(enrollment);
 			return OperationResult.OK;
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -135,11 +134,8 @@ public class StudentController  {
 		System.out.println(student.getEnrollment().size());
 		for(Enrollment e : student.getEnrollment()) {
 			if(e.getSubject().getSubjectCode() == subject.getSubjectCode()) {
-				System.out.println(e.getSubject().getSubjectCode() + " -> " + subject.getSubjectCode());
 				try {
                                         daoEnrollment.delete(e);
-                                        student.getEnrollment().remove(e);
-                                        subject.getEnrollments().remove(e);
 
 					return OperationResult.OK;
 				} catch(Exception ex) {

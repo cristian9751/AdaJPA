@@ -54,10 +54,10 @@ public class MainView {
 				break;
 			case 4:
 				System.out.println("Eliminando todos los datos que hay en la base de datos");
+				finalProjectController.deleteAll();
 				enrollmentController.deleteAll();
 				studentController.deleteAll();
 				groupController.deleteAll();
-				finalProjectController.deleteAll();
 				subjectController.deleteAll();
 				break;
 			case 5:

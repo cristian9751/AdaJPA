@@ -17,12 +17,16 @@ public class EnrollmentDAO {
 			Enrollment managedEnrollment = entityManager.merge(enrollment);
 			entityManager.remove(managedEnrollment);
 		});
+		
+		getEntityManager().clear();
 	}
 	
 	public void save(Enrollment enrollment) throws Exception {
 		performTransaction(entityManager -> {
 			entityManager.persist(enrollment);
 		});
+		
+		getEntityManager().clear();
 		
 
 	}
