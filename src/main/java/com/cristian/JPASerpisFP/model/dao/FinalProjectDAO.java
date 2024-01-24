@@ -69,5 +69,13 @@ public class FinalProjectDAO implements IDao<FinalProject> {
 		
 		return result[0];
 	}
+	
+	
+	public List<FinalProject> findByTitle(String title) {
+		EntityManager entityManager = getEntityManager();
+		TypedQuery<FinalProject> query = entityManager.createNamedQuery(FinalProject.SELECT_TITLE, FinalProject.class);
+		query.setParameter("title", title);
+		return query.getResultList();
+	}
 
 }
