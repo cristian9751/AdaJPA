@@ -19,7 +19,8 @@ public class FinalProjectView {
         System.out.println("1. Mostrar todos los proyectos");
         System.out.println("2. Crear un nuevo proyecto");
         System.out.println("3. Eliminar un proyecto");
-        System.out.println("4. Volver atras");
+        System.out.println("4. Listar proyecto por titulo");
+        System.out.println("5. Volver atras");
         return getInt("Selecciona una opcion del 1 al 3", false);
     }
         
@@ -38,7 +39,7 @@ public class FinalProjectView {
 				continue;
 			}
 			action(selectedOption);
-		} while(selectedOption != 4);
+		} while(selectedOption != 5);
 	}
       
       
@@ -70,8 +71,12 @@ public class FinalProjectView {
 				
                   break;
               case 4:
-                  System.out.println("Has seleccionado la opcion de volver al menu principal");
+                  showList(finalProjectController.getByTitle(getStringDatabase("Introduce el titulo del proyecto", false)), " proyectos con el titulo indicado");
                   break;
+                  
+              case 5:
+            	  System.out.println("Has seleccionado la opcion de volver al menu principal");
+            	  break;
                   
                   
           }
